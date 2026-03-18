@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 50" fill="none">
+  <!-- House icon in circle -->
+  <circle cx="25" cy="25" r="24" fill="#61bed8"/>
+  <circle cx="25" cy="25" r="20" fill="#324b73"/>
+  <!-- House/roof shape -->
+  <path d="M25 8 L38 20 L38 38 L33 38 L33 24 L17 38 L12 38 L12 20 Z" fill="#61bed8" stroke="#61bed8" stroke-width="0.5" stroke-linejoin="round"/>
+  <!-- NS text -->
+  <text x="58" y="28" font-family="'Plus Jakarta Sans','Inter',sans-serif" font-weight="800" font-size="18" letter-spacing="1.5" fill="#ffffff">NS</text>
+  <!-- ROOFER text -->
+  <text x="96" y="28" font-family="'Plus Jakarta Sans','Inter',sans-serif" font-weight="400" font-size="18" letter-spacing="2.5" fill="#ffffff">ROOFER</text>
+</svg>
