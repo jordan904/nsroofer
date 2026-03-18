@@ -139,7 +139,9 @@ img { max-width: 100%; height: auto; display: block; }
   max-width: var(--container); margin: 0 auto; padding: 0 24px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.nav-logo img { height: 42px; width: auto; }
+.nav-logo { position: relative; z-index: 1002; }
+.nav-logo img { height: 42px; width: auto; transition: filter 0.3s; }
+.nav.scrolled .nav-logo img { filter: brightness(0) saturate(100%); }
 .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
 .nav-links a {
   font-size: 0.9rem; font-weight: 500;
@@ -168,6 +170,10 @@ img { max-width: 100%; height: auto; display: block; }
   transition: all 0.3s;
 }
 .nav.scrolled .nav-hamburger span { background: var(--slate-800); }
+.nav-links.active ~ .nav-hamburger span { background: var(--white); }
+.nav-links.active ~ .nav-hamburger span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-links.active ~ .nav-hamburger span:nth-child(2) { opacity: 0; }
+.nav-links.active ~ .nav-hamburger span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
 /* ─── HERO ─── */
 .hero {
@@ -392,12 +398,33 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .about-checklist li svg { width: 20px; height: 20px; fill: var(--green-500); flex-shrink: 0; }
 
-/* ─── GALLERY ─── */
-.gallery-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 16px; margin-top: 56px;
+/* ─── GALLERY CAROUSEL ─── */
+.gallery-filters {
+  display: flex; justify-content: center; gap: 12px;
+  margin-top: 32px; margin-bottom: 32px; flex-wrap: wrap;
+}
+.gallery-filter {
+  background: none; border: 1px solid var(--slate-300);
+  padding: 8px 20px; border-radius: 100px;
+  font-size: 0.85rem; font-weight: 600; color: var(--slate-600);
+  cursor: pointer; transition: all 0.3s;
+  font-family: var(--font-primary);
+}
+.gallery-filter:hover { border-color: var(--orange-500); color: var(--orange-500); }
+.gallery-filter.active {
+  background: var(--orange-500); border-color: var(--orange-500);
+  color: var(--white);
+}
+.gallery-carousel { position: relative; margin-top: 16px; }
+.gallery-track-wrapper {
+  overflow: hidden; border-radius: var(--radius);
+}
+.gallery-track {
+  display: flex; gap: 16px;
+  transition: transform 0.5s ease;
 }
 .gallery-item {
+  flex: 0 0 calc(25% - 12px);
   border-radius: var(--radius); overflow: hidden;
   aspect-ratio: 1; cursor: pointer;
 }
@@ -406,6 +433,41 @@ img { max-width: 100%; height: auto; display: block; }
   transition: transform 0.4s;
 }
 .gallery-item:hover img { transform: scale(1.08); }
+.gallery-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--white); border: 1px solid var(--slate-200);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s; z-index: 5;
+  color: var(--slate-700);
+}
+.gallery-nav:hover { background: var(--orange-500); color: var(--white); border-color: var(--orange-500); }
+.gallery-nav:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.gallery-nav svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gallery-prev { left: -24px; }
+.gallery-next { right: -24px; }
+.gallery-dots {
+  display: flex; justify-content: center; gap: 8px; margin-top: 24px;
+}
+.gallery-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--slate-300); border: none;
+  cursor: pointer; transition: all 0.3s; padding: 0;
+}
+.gallery-dot.active { background: var(--orange-500); transform: scale(1.2); }
+
+@media (max-width: 1024px) {
+  .gallery-item { flex: 0 0 calc(33.333% - 11px); }
+  .gallery-prev { left: -12px; }
+  .gallery-next { right: -12px; }
+}
+@media (max-width: 768px) {
+  .gallery-item { flex: 0 0 calc(50% - 8px); }
+  .gallery-prev { left: 8px; }
+  .gallery-next { right: 8px; }
+  .gallery-nav { width: 40px; height: 40px; }
+}
 
 /* ─── LIGHTBOX ─── */
 .lightbox {
@@ -787,7 +849,7 @@ img { max-width: 100%; height: auto; display: block; }
     <h2 class="section-title reveal reveal-delay-1">Comprehensive roofing<br>solutions for <em>every need</em></h2>
     <p class="section-subtitle reveal reveal-delay-2">From shingle and metal roofing to insulation, siding, and repairs — we do it all.</p>
     <div class="services-grid">
-      <div class="service-card reveal reveal-delay-1">
+      <a href="shingle-roofing.html" class="service-card reveal reveal-delay-1">
         <img src="site_nsroofer_com/images/img_0aec25080cf9.jpg" alt="Shingle roofing installation on a Nova Scotia home" width="600" height="400" loading="lazy" decoding="async">
         <div class="service-card-overlay"></div>
         <div class="service-card-content">
@@ -795,8 +857,8 @@ img { max-width: 100%; height: auto; display: block; }
           <p>Asphalt shingle installations backed by 40-50 year manufacturer warranties and a 10-year transferable workmanship warranty.</p>
           <div class="service-arrow">Learn more <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
         </div>
-      </div>
-      <div class="service-card reveal reveal-delay-2">
+      </a>
+      <a href="metal-roofing.html" class="service-card reveal reveal-delay-2">
         <img src="site_nsroofer_com/images/img_037a1c06ddef.jpg" alt="Metal roofing panels being installed" width="600" height="400" loading="lazy" decoding="async">
         <div class="service-card-overlay"></div>
         <div class="service-card-content">
@@ -804,8 +866,8 @@ img { max-width: 100%; height: auto; display: block; }
           <p>50+ year lifespan, energy efficient, fire resistant. The last roof you'll ever need — ideal for Nova Scotia's coastal climate.</p>
           <div class="service-arrow">Learn more <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
         </div>
-      </div>
-      <div class="service-card reveal reveal-delay-3">
+      </a>
+      <a href="siding.html" class="service-card reveal reveal-delay-3">
         <img src="site_nsroofer_com/images/img_6ac484e66ff4.jpg" alt="Vinyl siding installation on exterior walls" width="600" height="400" loading="lazy" decoding="async">
         <div class="service-card-overlay"></div>
         <div class="service-card-content">
@@ -813,8 +875,8 @@ img { max-width: 100%; height: auto; display: block; }
           <p>Vinyl siding, metal siding, fascia, soffit and eavestrough — double lifetime warranty with expert local service.</p>
           <div class="service-arrow">Learn more <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
         </div>
-      </div>
-      <div class="service-card reveal reveal-delay-4">
+      </a>
+      <a href="insulation.html" class="service-card reveal reveal-delay-4">
         <img src="site_nsroofer_com/images/img_51309eaa2071.jpg" alt="Blow-in insulation being applied in attic" width="600" height="400" loading="lazy" decoding="async">
         <div class="service-card-overlay"></div>
         <div class="service-card-content">
@@ -822,7 +884,7 @@ img { max-width: 100%; height: auto; display: block; }
           <p>Blow-in, wall, and batt insulation with a price match guarantee. Cut energy bills and qualify for government rebates.</p>
           <div class="service-arrow">Learn more <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -862,16 +924,66 @@ img { max-width: 100%; height: auto; display: block; }
       <div class="section-label reveal" style="justify-content:center;">Project Gallery</div>
       <h2 class="section-title reveal reveal-delay-1">Our recent work<br>speaks for itself</h2>
     </div>
-    <div class="gallery-grid">
-      <div class="gallery-item reveal reveal-delay-1"><img src="site_nsroofer_com/images/img_0aec25080cf9.jpg" alt="Completed shingle roof replacement" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-2"><img src="site_nsroofer_com/images/img_f94ab148dcc8.jpg" alt="New asphalt shingle installation" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-3"><img src="site_nsroofer_com/images/img_8937bc407f56.jpg" alt="Residential roofing project in progress" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-4"><img src="site_nsroofer_com/images/img_b7fc610e2473.jpg" alt="Finished roofing with clean ridge line" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-1"><img src="site_nsroofer_com/images/img_6ac484e66ff4.jpg" alt="Siding installation on residential home" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-2"><img src="site_nsroofer_com/images/img_bb20814515b3.jpg" alt="Exterior siding and trim work" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-3"><img src="site_nsroofer_com/images/img_51309eaa2071.jpg" alt="Insulation work in attic space" width="400" height="400" loading="lazy" decoding="async"></div>
-      <div class="gallery-item reveal reveal-delay-4"><img src="site_nsroofer_com/images/img_e9101ab495f9.jpg" alt="Blow-in insulation being installed" width="400" height="400" loading="lazy" decoding="async"></div>
+    <div class="gallery-filters reveal reveal-delay-2">
+      <button class="gallery-filter active" data-filter="all">All Projects</button>
+      <button class="gallery-filter" data-filter="shingle">Shingle Roofing</button>
+      <button class="gallery-filter" data-filter="metal">Metal Roofing</button>
+      <button class="gallery-filter" data-filter="siding">Siding</button>
+      <button class="gallery-filter" data-filter="insulation">Insulation</button>
     </div>
+    <div class="gallery-carousel reveal reveal-delay-3">
+      <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Previous images" disabled>
+        <svg viewBox="0 0 24 24"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
+      </button>
+      <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Next images">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      </button>
+      <div class="gallery-track-wrapper">
+        <div class="gallery-track" id="gallery-track">
+          <!-- Shingle Roofing -->
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_0aec25080cf9.jpg" alt="Completed shingle roof replacement" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_f94ab148dcc8.jpg" alt="New asphalt shingle installation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_8937bc407f56.jpg" alt="Residential shingle roofing project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_b7fc610e2473.jpg" alt="Finished shingle roof with clean ridge" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_6eb9d40251cb.jpg" alt="Shingle roofing in progress" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_493ee8e6818d.jpg" alt="Shingle roof installation detail" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_9702f17d29e6.jpg" alt="Residential shingle re-roofing" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_4671b29e3982.jpg" alt="Shingle roof with new flashing" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_972f97493c50.jpg" alt="Complete shingle roof replacement" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_1d3226b1facd.jpg" alt="New shingle roof aerial view" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_272f6c86e6de.jpg" alt="Shingle roofing project in Halifax" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_0aec3ca5db9a.jpg" alt="Asphalt shingle installation close-up" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_19624f7621f9.jpg" alt="Shingle roof with ridge vent" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="shingle"><img src="site_nsroofer_com/images/img_1feaafbb1150.jpg" alt="Finished shingle roofing project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <!-- Metal Roofing -->
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_ecb76a50964b.jpg" alt="Standing seam metal roof installation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_aabebb8f2b68.jpg" alt="Metal roofing panels on residential home" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_0e371c1b90e9.jpg" alt="Metal roof installation in progress" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_c2ac048043a1.jpg" alt="Completed metal roofing project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_7ef595fb784d.jpg" alt="Metal roof with snow guards" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_117e7e3653fa.jpg" alt="Metal roofing detail work" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_9abfaaef1ffa.jpg" alt="Metal roof on Nova Scotia home" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="metal"><img src="site_nsroofer_com/images/img_dbee0d1ea2c7.jpg" alt="Steel roofing installation complete" width="400" height="400" loading="lazy" decoding="async"></div>
+          <!-- Siding -->
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_6ac484e66ff4.jpg" alt="Vinyl siding installation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_bb20814515b3.jpg" alt="Exterior siding and trim work" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_304b008edcb1.jpg" alt="Siding replacement project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_cad16e7d0224.jpg" alt="New siding on residential home" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_ae71ce807cb4.jpg" alt="Siding and soffit installation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_0edacb8f61fe.jpg" alt="Complete siding renovation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="siding"><img src="site_nsroofer_com/images/img_dd1091af7f20.jpg" alt="Fascia and siding project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <!-- Insulation -->
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_51309eaa2071.jpg" alt="Blow-in insulation in attic" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_e9101ab495f9.jpg" alt="Insulation installation project" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_15c984a7053e.jpg" alt="Wall insulation being applied" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_bcd53773d119.jpg" alt="Attic insulation upgrade" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_3e7eb0622423.jpg" alt="Insulation coverage detail" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_31c4ce1a307e.jpg" alt="Batt insulation installation" width="400" height="400" loading="lazy" decoding="async"></div>
+          <div class="gallery-item" data-category="insulation"><img src="site_nsroofer_com/images/img_ca8dca554c6a.jpg" alt="Completed insulation project" width="400" height="400" loading="lazy" decoding="async"></div>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-dots" id="gallery-dots"></div>
   </div>
 </section>
 
@@ -1120,6 +1232,99 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
   });
 });
 
+// Gallery Carousel
+(function() {
+  var track = document.getElementById('gallery-track');
+  var prevBtn = document.getElementById('gallery-prev');
+  var nextBtn = document.getElementById('gallery-next');
+  var dotsContainer = document.getElementById('gallery-dots');
+  var allItems = Array.from(track.querySelectorAll('.gallery-item'));
+  var filteredItems = allItems.slice();
+  var page = 0;
+  var perPage = 4;
+
+  function getPerPage() {
+    if (window.innerWidth <= 768) return 2;
+    if (window.innerWidth <= 1024) return 3;
+    return 4;
+  }
+
+  function getTotalPages() {
+    return Math.ceil(filteredItems.length / perPage);
+  }
+
+  function render() {
+    perPage = getPerPage();
+    var totalPages = getTotalPages();
+    if (page >= totalPages) page = Math.max(0, totalPages - 1);
+
+    // Remove all items from track, then re-add only filtered ones
+    while (track.firstChild) track.removeChild(track.firstChild);
+    filteredItems.forEach(function(item) { track.appendChild(item); });
+
+    // Calculate offset: slide by perPage items at a time
+    var gap = 16;
+    var wrapperWidth = track.parentElement.offsetWidth;
+    var itemWidth = (wrapperWidth - gap * (perPage - 1)) / perPage;
+    var offset = page * perPage * (itemWidth + gap);
+    track.style.transform = 'translateX(-' + offset + 'px)';
+
+    // Set item widths explicitly so flex works
+    filteredItems.forEach(function(item) {
+      item.style.flex = '0 0 ' + itemWidth + 'px';
+    });
+
+    // Update nav buttons
+    prevBtn.disabled = page === 0;
+    nextBtn.disabled = page >= totalPages - 1;
+
+    // Update dots
+    dotsContainer.innerHTML = '';
+    for (var i = 0; i < totalPages; i++) {
+      var dot = document.createElement('button');
+      dot.className = 'gallery-dot' + (i === page ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to page ' + (i + 1));
+      dot.setAttribute('data-page', i);
+      dot.addEventListener('click', function() {
+        page = parseInt(this.getAttribute('data-page'));
+        render();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  prevBtn.addEventListener('click', function() {
+    if (page > 0) { page--; render(); }
+  });
+
+  nextBtn.addEventListener('click', function() {
+    if (page < getTotalPages() - 1) { page++; render(); }
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.gallery-filter').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.gallery-filter').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var filter = btn.getAttribute('data-filter');
+      filteredItems = allItems.filter(function(item) {
+        return filter === 'all' || item.getAttribute('data-category') === filter;
+      });
+      page = 0;
+      render();
+    });
+  });
+
+  // Resize handler
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 150);
+  }, { passive: true });
+
+  render();
+})();
+
 // Contact form
 document.getElementById('contact-form').addEventListener('submit', function(e) {
   e.preventDefault();
@@ -1135,13 +1340,19 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   var lightbox = document.getElementById('lightbox');
   var lbImg = document.getElementById('lightbox-img');
   var lbCounter = document.getElementById('lightbox-counter');
-  var items = document.querySelectorAll('.gallery-item img');
   var current = 0;
 
-  function open(index) {
-    current = index;
-    lbImg.src = items[current].src;
-    lbImg.alt = items[current].alt;
+  function getItems() {
+    return Array.from(document.querySelectorAll('#gallery-track .gallery-item img'));
+  }
+
+  function open(src, alt) {
+    var items = getItems();
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].src === src) { current = i; break; }
+    }
+    lbImg.src = src;
+    lbImg.alt = alt;
     lbCounter.textContent = (current + 1) + ' / ' + items.length;
     lightbox.classList.add('active');
     lightbox.setAttribute('aria-hidden', 'false');
@@ -1156,6 +1367,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   }
 
   function prev() {
+    var items = getItems();
     current = (current - 1 + items.length) % items.length;
     lbImg.src = items[current].src;
     lbImg.alt = items[current].alt;
@@ -1163,15 +1375,17 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
   }
 
   function next() {
+    var items = getItems();
     current = (current + 1) % items.length;
     lbImg.src = items[current].src;
     lbImg.alt = items[current].alt;
     lbCounter.textContent = (current + 1) + ' / ' + items.length;
   }
 
-  items.forEach(function(img, i) {
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', function() { open(i); });
+  // Delegate clicks on gallery images (since DOM is re-ordered by carousel)
+  document.getElementById('gallery-track').addEventListener('click', function(e) {
+    var img = e.target.closest('.gallery-item img') || (e.target.closest('.gallery-item') && e.target.closest('.gallery-item').querySelector('img'));
+    if (img) open(img.src, img.alt);
   });
 
   lightbox.querySelector('.lightbox-close').addEventListener('click', close);
