@@ -118,8 +118,10 @@ img { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo { position: relative; z-index: 1002; }
-.nav-logo img { height: 42px; width: auto; transition: filter 0.3s; }
-.nav.scrolled .nav-logo img { filter: brightness(0) saturate(100%); }
+.nav-logo img { height: 42px; width: auto; }
+.nav-logo .logo-dark { display: none; }
+.nav.scrolled .nav-logo .logo-light { display: none; }
+.nav.scrolled .nav-logo .logo-dark { display: block; }
 .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
 .nav-links a {
   font-size: 0.9rem; font-weight: 500;
@@ -282,9 +284,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── BENEFITS ─── */
 .benefits-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: flex; flex-wrap: wrap; justify-content: center;
   gap: 24px; margin-top: 56px;
 }
+.benefits-grid .benefit-card { width: calc(25% - 18px); }
 .benefit-card {
   position: relative; border-radius: var(--radius); overflow: hidden;
   min-height: 340px; display: flex; align-items: flex-end;
@@ -309,9 +312,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── GALLERY ─── */
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: flex; flex-wrap: wrap; justify-content: center;
   gap: 16px; margin-top: 56px;
 }
+.gallery-grid .gallery-item { width: calc(25% - 12px); }
 .gallery-item {
   border-radius: var(--radius); overflow: hidden;
   aspect-ratio: 1; cursor: pointer;
@@ -454,8 +458,8 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1024px) {
-  .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .benefits-grid .benefit-card { width: calc(50% - 12px); }
+  .gallery-grid .gallery-item { width: calc(33.333% - 11px); }
   .description-grid { gap: 40px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
@@ -471,10 +475,10 @@ img { max-width: 100%; height: auto; display: block; }
   .nav-links.active a { font-size: 1.2rem; color: var(--white) !important; }
   .nav-hamburger { display: flex; z-index: 1001; }
   .hero h1 { font-size: 2.4rem; }
-  .benefits-grid { grid-template-columns: 1fr; }
+  .benefits-grid .benefit-card { width: 100%; }
   .description-grid { grid-template-columns: 1fr; }
   .description-highlights { grid-template-columns: 1fr; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid .gallery-item { width: calc(50% - 8px); }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .section { padding: 64px 0; }
@@ -487,7 +491,8 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-btns a { width: 100%; justify-content: center; }
   .section { padding: 48px 0; }
   .section-title { font-size: 1.6rem; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .gallery-grid { gap: 10px; }
+  .gallery-grid .gallery-item { width: calc(50% - 5px); }
   .description-highlights { grid-template-columns: 1fr; }
   .cta-banner { padding: 56px 0; }
   .cta-banner h2 { font-size: 1.6rem; }
@@ -503,7 +508,8 @@ img { max-width: 100%; height: auto; display: block; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="site_nsroofer_com/images/ns-roofer-logo.png" alt="NS Roofer" width="120" height="42">
+      <img src="site_nsroofer_com/images/ns-roofer-logo.png" alt="NS Roofer" width="120" height="42" class="logo-light">
+      <img src="site_nsroofer_com/images/ns-roofer-logo-dark.png" alt="NS Roofer" width="120" height="42" class="logo-dark">
     </a>
     <ul class="nav-links" id="nav-links" role="list">
       <li><a href="index.html#services">Services</a></li>
@@ -615,7 +621,7 @@ img { max-width: 100%; height: auto; display: block; }
     </div>
     <div class="benefits-grid">
       <div class="benefit-card reveal reveal-delay-1">
-        <img src="site_nsroofer_com/images/img_5bfb05edab90.jpg" alt="Metal roof withstanding heavy coastal weather" width="400" height="340" loading="lazy" decoding="async">
+        <img src="site_nsroofer_com/images/img_ecb76a50964b.jpg" alt="Metal roof withstanding heavy coastal weather" width="400" height="340" loading="lazy" decoding="async">
         <div class="benefit-card-overlay"></div>
         <div class="benefit-card-content">
           <h3>Storm Resistant</h3>
@@ -623,7 +629,7 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
       </div>
       <div class="benefit-card reveal reveal-delay-2">
-        <img src="site_nsroofer_com/images/img_e42a5952ecc3.jpg" alt="Energy efficient metal roof reflecting sunlight" width="400" height="340" loading="lazy" decoding="async">
+        <img src="site_nsroofer_com/images/img_aabebb8f2b68.jpg" alt="Energy efficient metal roof reflecting sunlight" width="400" height="340" loading="lazy" decoding="async">
         <div class="benefit-card-overlay"></div>
         <div class="benefit-card-content">
           <h3>Energy Savings</h3>
@@ -631,7 +637,7 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
       </div>
       <div class="benefit-card reveal reveal-delay-3">
-        <img src="site_nsroofer_com/images/img_83a88a68bdde.jpg" alt="Environmentally friendly recyclable metal roofing" width="400" height="340" loading="lazy" decoding="async">
+        <img src="site_nsroofer_com/images/img_0e371c1b90e9.jpg" alt="Environmentally friendly recyclable metal roofing" width="400" height="340" loading="lazy" decoding="async">
         <div class="benefit-card-overlay"></div>
         <div class="benefit-card-content">
           <h3>Eco-Friendly</h3>
@@ -639,7 +645,7 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
       </div>
       <div class="benefit-card reveal reveal-delay-4">
-        <img src="site_nsroofer_com/images/img_9ce00d274541.jpg" alt="Beautiful metal roof increasing home curb appeal" width="400" height="340" loading="lazy" decoding="async">
+        <img src="site_nsroofer_com/images/img_c2ac048043a1.jpg" alt="Beautiful metal roof increasing home curb appeal" width="400" height="340" loading="lazy" decoding="async">
         <div class="benefit-card-overlay"></div>
         <div class="benefit-card-content">
           <h3>Curb Appeal</h3>

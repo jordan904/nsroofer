@@ -118,8 +118,10 @@ img { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo { position: relative; z-index: 1002; }
-.nav-logo img { height: 42px; width: auto; transition: filter 0.3s; }
-.nav.scrolled .nav-logo img { filter: brightness(0) saturate(100%); }
+.nav-logo img { height: 42px; width: auto; }
+.nav-logo .logo-dark { display: none; }
+.nav.scrolled .nav-logo .logo-light { display: none; }
+.nav.scrolled .nav-logo .logo-dark { display: block; }
 .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
 .nav-links a {
   font-size: 0.9rem; font-weight: 500;
@@ -282,9 +284,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── BENEFITS GRID ─── */
 .benefits-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: flex; flex-wrap: wrap; justify-content: center;
   gap: 24px; margin-top: 56px;
 }
+.benefits-grid .benefit-card { width: calc(33.333% - 16px); }
 .benefit-card {
   background: var(--white); border: 1px solid var(--slate-200);
   border-radius: var(--radius); overflow: hidden;
@@ -309,9 +312,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── GALLERY ─── */
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: flex; flex-wrap: wrap; justify-content: center;
   gap: 16px; margin-top: 56px;
 }
+.gallery-grid .gallery-item { width: calc(25% - 12px); }
 .gallery-item {
   border-radius: var(--radius); overflow: hidden;
   aspect-ratio: 1; cursor: pointer;
@@ -453,8 +457,8 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1024px) {
-  .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .benefits-grid .benefit-card { width: calc(50% - 12px); }
+  .gallery-grid .gallery-item { width: calc(33.333% - 11px); }
   .desc-grid { gap: 40px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
@@ -470,16 +474,17 @@ img { max-width: 100%; height: auto; display: block; }
   .nav-links.active a { font-size: 1.2rem; color: var(--white) !important; }
   .nav-hamburger { display: flex; z-index: 1001; }
   .hero h1 { font-size: 2.4rem; }
-  .benefits-grid { grid-template-columns: 1fr; }
+  .benefits-grid .benefit-card { width: 100%; }
   .desc-grid { grid-template-columns: 1fr; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid .gallery-item { width: calc(50% - 8px); }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .desc-image-badge { bottom: -10px; right: 10px; padding: 14px 20px; }
   .section { padding: 64px 0; }
 }
 @media (max-width: 480px) {
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { gap: 10px; }
+  .gallery-grid .gallery-item { width: calc(50% - 5px); }
   .hero-btns { flex-direction: column; }
   .cta-btns { flex-direction: column; align-items: center; }
 }
@@ -494,7 +499,8 @@ img { max-width: 100%; height: auto; display: block; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="site_nsroofer_com/images/ns-roofer-logo.png" alt="NS Roofer" width="120" height="42">
+      <img src="site_nsroofer_com/images/ns-roofer-logo.png" alt="NS Roofer" width="120" height="42" class="logo-light">
+      <img src="site_nsroofer_com/images/ns-roofer-logo-dark.png" alt="NS Roofer" width="120" height="42" class="logo-dark">
     </a>
     <ul class="nav-links" id="nav-links" role="list">
       <li><a href="index.html#services">Services</a></li>
