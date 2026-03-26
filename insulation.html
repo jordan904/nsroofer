@@ -110,8 +110,7 @@ img { max-width: 100%; height: auto; display: block; }
   transition: all 0.3s ease;
 }
 .nav.scrolled {
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(20px);
+  background: #ffffff;
   box-shadow: 0 1px 20px rgba(0,0,0,0.08);
   padding: 10px 0;
 }
@@ -497,6 +496,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 @media (max-width: 768px) {
   .nav-links { display: none; }
+  .nav { background: var(--slate-950); }
+  .nav.scrolled { background: #ffffff; }
   .nav-links.active {
     display: flex; flex-direction: column;
     position: fixed; inset: 0;
